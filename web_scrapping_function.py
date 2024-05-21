@@ -90,10 +90,27 @@ def extract_date_from_url(url) -> str:
     
 
 def replace_company_with_symbol(data, mapping):
-    # Using regex to replace full company names with stock symbols
-    for company, symbol in mapping.items():
-        data = re.sub(r'\b' + re.escape(company) + r'\b', symbol, data)
-    return data
+    lines = data.strip().split('\n')
+    updated_lines = []
+
+    for line in lines:
+        company_found = False
+        
+        for company, symbol in mapping.items():
+            if company in line:
+                line = re.sub(r'\b' + re.escape(company) + r'\b', symbol, line)
+                company_found = True
+                break
+
+        if company_found:
+            updated_lines.append(line)
+        else:
+            if any(char.isalpha() for char in line):
+                updated_lines.append("no_data")
+            else:
+                updated_lines.append(line)
+    
+    return '\n'.join(updated_lines)
 
 def make_maping(url)->dict:
     # Fetch the webpage
