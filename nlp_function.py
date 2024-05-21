@@ -2,8 +2,7 @@ from web_scrapping_function import get_urls,extract_text_from_div,extract_date_f
 import pandas as pd
 from transformers import pipeline
 
-url_list=get_urls("https://finance.yahoo.com/")
-url=url_list[0]
+
 
 
 def sentiment_with_date_and_org(url):
