@@ -1,8 +1,9 @@
 import mechanicalsoup
 import requests
 from bs4 import BeautifulSoup
+import re
 
-browser = mechanicalsoup.Browser()
+
 
 
 def get_urls(url: str)->list:
@@ -35,8 +36,7 @@ def get_urls(url: str)->list:
         print("Failed to retrieve the webpage.")
         return None
 
-import requests
-from bs4 import BeautifulSoup
+
 
 def extract_text_from_div(url) ->str:
     text_content = []
@@ -87,5 +87,32 @@ def extract_date_from_url(url) -> str:
             return "No datetime attribute found"
     else:
         return "Failed to retrieve the webpage"
+    
+
+def replace_company_with_symbol(data, mapping):
+    # Using regex to replace full company names with stock symbols
+    for company, symbol in mapping.items():
+        data = re.sub(r'\b' + re.escape(company) + r'\b', symbol, data)
+    return data
+
+def make_maping(url)->dict:
+    # Fetch the webpage
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Parse the table of S&P 500 companies
+    table = soup.find('table', {'id': 'constituents'})
+
+    # Initialize the dictionary
+    company_to_symbol = {}
+
+    # Loop through table rows and extract company names and stock symbols
+    for row in table.tbody.find_all('tr')[1:]:
+        cols = row.find_all('td')
+        symbol = cols[0].text.strip()
+        company = cols[1].text.strip()
+        company_to_symbol[company] = symbol
+
+    return company_to_symbol
 
 
