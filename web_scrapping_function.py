@@ -113,7 +113,7 @@ def replace_company_with_symbol(data, mapping):
     
     return '\n'.join(updated_lines)
 
-def make_maping(url)->dict:
+def make_mapping(url)->dict:
     # Fetch the webpage
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
