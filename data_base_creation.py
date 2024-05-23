@@ -12,6 +12,12 @@ CREATE TABLE news_data (
 );
 """
 
-execute_query(connection,config_query)
+delete_querry="""
+DELETE FROM news_data;
+"""
+
+execute_query(connection,delete_querry)
+
+connection.commit()
 
 connection.close()
