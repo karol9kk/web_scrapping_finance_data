@@ -83,7 +83,7 @@ def extract_date_from_url(url) -> str:
             datetime_value = time_element['datetime']
             # Split the datetime value to get only the date part
             date_value = datetime_value.split('T')[0]
-            return date_value
+            return str(date_value)
         else:
             return "No datetime attribute found"
     else:
