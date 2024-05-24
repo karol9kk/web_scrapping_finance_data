@@ -4,7 +4,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 def get_stock_symbol(input):
 
-    input="Google"
+    
 
     messages=[
         {
@@ -12,7 +12,7 @@ def get_stock_symbol(input):
         "content": [
             {
             "type": "text",
-            "text": "Give only a stock symbol"
+            "text": "Give only a stock symbol, if there is no anwser no_data"
             }
         ]
         },
@@ -39,3 +39,5 @@ def get_stock_symbol(input):
 
 
     symbol=response.choices[0].message.content
+
+    return symbol
