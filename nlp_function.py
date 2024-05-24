@@ -95,9 +95,8 @@ def main(url, db_params):
 
     processed_results = []
     for date, company, score in results:
-        company_symbol = replace_company_with_symbol(company, mapping)
-        if company_symbol:
-            processed_results.append([date, company_symbol, score])
+        if company:
+            processed_results.append([date, company, score])
 
     query = '''
     INSERT INTO news_data (news_date, company_name, sentiment_score)
