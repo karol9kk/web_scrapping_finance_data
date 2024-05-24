@@ -13,7 +13,7 @@ def make_summarizer():
 
 def make_ner_tagger():
     ner_model='dslim/distilbert-NER'
-    ner_tagger=pipeline("ner",model=ner_model)
+    ner_tagger=pipeline("ner",model=ner_model,aggregation_strategy="simple")
     return ner_tagger
 
 def make_classifier():
@@ -42,7 +42,6 @@ def sentiment_with_date_and_org(url,summarizer,ner_tagger,classifier):
     summarized_text_str = str(outputs[0]['summary_text'])
     
     #entity detection
-    ner_tagger=pipeline("ner",aggregation_strategy="simple")
     outputs_ner=ner_tagger(summarized_text_str)
     org_entities = [entity['word'] for entity in outputs_ner if entity['entity_group']== 'ORG']
     org_entity = org_entities[0] if org_entities else "no_data"
@@ -54,7 +53,6 @@ def sentiment_with_date_and_org(url,summarizer,ner_tagger,classifier):
         
 
     #sentiment 
-    classifier=pipeline("text-classification")
     label=classifier(summarized_text_str)[0]['label']
     print(label)
     outputs_sentiment=classifier(summarized_text_str)[0]['score']
@@ -76,7 +74,7 @@ def get_results(urls):
 
     results = []
     
-    for url in urls:
+    for url in urls[:2]:
         result = sentiment_with_date_and_org(url, summarizer, ner_tagger, classifier)
         results.append(result)
         print(result)
@@ -89,21 +87,21 @@ def main(url, db_params):
     urls = get_urls(url)
     results = get_results(urls)
 
-    mapping_url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-    mapping = make_mapping(mapping_url)
+    #mapping_url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+    #mapping = make_mapping(mapping_url)
 
     processed_results = []
     for date, company, score in results:
-        if company!="no_data":
-            processed_results.append([date, company, score])
+        if company != "no_data":
+            processed_results.append((date, company, score))
 
     query = '''
-    INSERT INTO news_data (news_date, company_name, sentiment_score)
+    INSERT INTO sentiment_data (news_date, stock_symbol, sentiment_score)
     VALUES (%s, %s, %s)
     '''
     connection = create_db_connection(*db_params)
-    for results in processed_results:
-        execute_list_query(connection, query, results)
+    
+    execute_list_query(connection, query, results)
     
     connection.commit()
 

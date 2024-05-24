@@ -55,11 +55,13 @@ def execute_query(connection, query):
     finally:
         cursor.close()
 
-def execute_list_query(connection, querry, list_of_values:list):
+
+
+def execute_list_query(connection, query, list_of_values: list):
     cursor = connection.cursor()
     try:
-        cursor.executemany(querry, list_of_values)
+        cursor.executemany(query, list_of_values)
         connection.commit()
         print("Query successful")
-    except Error as err:
-        print(f"Error: '{err}'")
+    except Exception as err:
+        print(f"Error: '{err}'")       
