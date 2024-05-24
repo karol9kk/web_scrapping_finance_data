@@ -3,6 +3,7 @@ import pandas as pd
 from transformers import pipeline
 from web_scrapping_function import make_mapping,replace_company_with_symbol
 from data_base_function import create_db_connection,execute_list_query
+from chat_gpt_api import get_stock_symbol
 
 
 def make_summarizer():
@@ -45,19 +46,27 @@ def sentiment_with_date_and_org(url,summarizer,ner_tagger,classifier):
     outputs_ner=ner_tagger(summarized_text_str)
     org_entities = [entity['word'] for entity in outputs_ner if entity['entity_group']== 'ORG']
     org_entity = org_entities[0] if org_entities else "no_data"
+    stock_symbol=""
+    if org_entities=="no_data":
+        stock_symbol="no_data"
+    else:
+        stock_symbol=get_stock_symbol(org_entity)
+        
+
     #sentiment 
     classifier=pipeline("text-classification")
     label=classifier(summarized_text_str)[0]['label']
+    print(label)
     outputs_sentiment=classifier(summarized_text_str)[0]['score']
     
-    if label=="negative":
+    if label=="NEGATIVE":
         outputs_sentiment*=-1
-    elif label=="neutral":
+    elif label=="NEUTRAL":
         outputs_sentiment=0
     
   
 
-    return date,org_entity,outputs_sentiment
+    return date,stock_symbol,outputs_sentiment
 
 def get_results(urls):
 
@@ -95,7 +104,9 @@ def main(url, db_params):
     VALUES (%s, %s, %s)
     '''
     connection = create_db_connection(*db_params)
-    execute_list_query(connection, query, processed_results)
+    for results in processed_results:
+        execute_list_query(connection, query, results)
+    
     connection.commit()
 
     for result in processed_results:
