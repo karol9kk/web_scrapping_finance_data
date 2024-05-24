@@ -17,7 +17,7 @@ def make_ner_tagger():
     return ner_tagger
 
 def make_classifier():
-    classifier=pipeline("summarization")
+    classifier=pipeline("sentiment-analysis")
     return classifier
 
 def shorten_text(text, max_length=1024):
@@ -86,7 +86,6 @@ def get_results(urls):
 
 def main(url, db_params):
     
-
     urls = get_urls(url)
     results = get_results(urls)
 
@@ -95,7 +94,7 @@ def main(url, db_params):
 
     processed_results = []
     for date, company, score in results:
-        if company:
+        if company!="no_data":
             processed_results.append([date, company, score])
 
     query = '''
