@@ -16,7 +16,7 @@ delete_querry="""
 DELETE FROM sentiment_data;
 """
 
-execute_query(connection,delete_querry)
+execute_query(connection,config_querry)
 
 connection.commit()
 
