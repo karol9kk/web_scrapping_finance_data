@@ -11,7 +11,7 @@ def get_stock_symbol(input):
         "content": [
             {
             "type": "text",
-            "text": "Give only a stock symbol, if there is no anwser no_data"
+            "text": "Give only a stock symbol, if does not exsists anwser no_data"
             }
         ]
         },
@@ -30,7 +30,7 @@ def get_stock_symbol(input):
     model="gpt-3.5-turbo",
     messages=messages,
     temperature=1,
-    max_tokens=10,
+    max_tokens=20,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0
@@ -50,7 +50,7 @@ def get_company(input):
         "content": [
             {
             "type": "text",
-            "text": "You are a financial reporter/ Give me only name of company, about which article is written about "
+            "text": "You are a financial reporter/ Give me only name of company, about which article is written about. / If there is no company output lack_of_data. "
             }
         ]
         },
@@ -69,8 +69,12 @@ def get_company(input):
     model="gpt-3.5-turbo",
     messages=messages,
     temperature=1,
-    max_tokens=10,
+    max_tokens=130,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0
     )
+
+    symbol=response.choices[0].message.content
+
+    return symbol
