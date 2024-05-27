@@ -3,7 +3,7 @@ from data_base_function import*
 
 connection=create_db_connection("localhost","Karol","sqlserwer1","projekt")
 
-config_query= """
+config_querry= """
 CREATE TABLE sentiment_data (
     news_id INT AUTO_INCREMENT PRIMARY KEY,
     news_date VARCHAR(14),
@@ -13,10 +13,10 @@ CREATE TABLE sentiment_data (
 """
 
 delete_querry="""
-DELETE FROM news_data;
+DELETE FROM sentiment_data;
 """
 
-execute_query(connection,config_query)
+execute_query(connection,delete_querry)
 
 connection.commit()
 
