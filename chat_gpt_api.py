@@ -11,7 +11,7 @@ def get_stock_symbol(input):
         "content": [
             {
             "type": "text",
-            "text": "Give only a stock symbol, if does not exsists anwser no_data"
+            "text": "Respond only by ticker symbol, if does not exsists anwser no_data"
             }
         ]
         },
@@ -20,7 +20,7 @@ def get_stock_symbol(input):
         "content": [
             {
             "type": "text",
-            "text": f"{input}"
+            "text": f"Give me ticker symbol of {input}."
             }
         ]
         }
@@ -50,7 +50,7 @@ def get_company(input):
         "content": [
             {
             "type": "text",
-            "text": "You are a financial reporter/ Give me only name of company, about which article is written about. / If there is no company output lack_of_data. "
+            "text": "You are a finance bot/ Answer only by one of: company name, crypto currency name, etf name or finance index name "
             }
         ]
         },
@@ -59,7 +59,7 @@ def get_company(input):
         "content": [
             {
             "type": "text",
-            "text": f"{input}"
+            "text": f"About what the text is? {input}"
             }
         ]
         }
