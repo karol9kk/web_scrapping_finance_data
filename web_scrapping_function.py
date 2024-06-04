@@ -87,7 +87,7 @@ def extract_date_from_url(url) -> str:
         else:
             return "No datetime attribute found"
     else:
-        return "Failed to retrieve the webpage"
+        return "Error"
     
 
 def replace_company_with_symbol(data, mapping):

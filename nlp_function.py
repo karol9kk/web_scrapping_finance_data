@@ -5,7 +5,7 @@ from web_scrapping_function import make_mapping,replace_company_with_symbol
 from data_base_function import create_db_connection,execute_list_query
 from chat_gpt_api import get_stock_symbol,get_company
 from transformers import PegasusTokenizer, PegasusForConditionalGeneration, TFPegasusForConditionalGeneration
-
+import re
 
 def make_summarizer():
    
@@ -88,7 +88,7 @@ def get_results(urls):
 
     results = []
     
-    for url in urls[:10]:
+    for url in urls:
         result = sentiment_with_date_and_org(url, summarizer, ner_tagger, classifier)
         results.append(result)
         print(result)
@@ -104,9 +104,15 @@ def main(url, db_params):
     #mapping_url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
     #mapping = make_mapping(mapping_url)
 
+    
+    
+    # Define the regex pattern for the date format YYYY-MM-DD
+    date_pattern = r'^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$'
+
     processed_results = []
     for date, company, score in results:
-        if company.lower() != 'no_data' and company != 'No_data':
+        # Check if the company is valid and the date matches the regex pattern
+        if (company.lower() != 'no_data' and company != 'No_data') and re.match(date_pattern, date):
             processed_results.append((date, company, score))
 
     query = ''' 

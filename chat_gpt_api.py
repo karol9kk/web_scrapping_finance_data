@@ -30,7 +30,7 @@ def get_stock_symbol(input):
     model="gpt-3.5-turbo",
     messages=messages,
     temperature=1,
-    max_tokens=20,
+    max_tokens=5,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0
@@ -50,7 +50,7 @@ def get_company(input):
         "content": [
             {
             "type": "text",
-            "text": "You are a finance bot/ Answer only by one of: company name, crypto currency name, etf name or finance index name "
+            "text": "You are a finance bot/ Answer only by one of: company name, crypto currency name, Exchange-Traded Funds name, bond name,  or mutual fund name/ If you don't find one, anwser no data "
             }
         ]
         },
@@ -69,7 +69,7 @@ def get_company(input):
     model="gpt-3.5-turbo",
     messages=messages,
     temperature=1,
-    max_tokens=130,
+    max_tokens=10,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0
