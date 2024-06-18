@@ -19,7 +19,8 @@ def make_ner_tagger():
     return ner_tagger
 
 def make_classifier():
-    model="mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+    #model="mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+    model="soleimanian/financial-roberta-large-sentiment"
     classifier=pipeline("sentiment-analysis",model=model)
     return classifier
 
